@@ -24,7 +24,7 @@ public class Solution{
     			break;
     		}
     	}
-    	if(begin>end){
+    	if(begin>end){//when finishing the while loop, the begin and end will be the bound of the range: (end, begin)
     		System.out.println("The target is not found. The range that it falls at is: ("+end+", "+begin+")");
     	}
 	}
