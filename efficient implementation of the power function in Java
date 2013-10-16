@@ -1,0 +1,48 @@
+/* do it by square-and-multiply
+*/
+
+//non-recursive version:
+int ipow(int base, int exp)
+{
+    int result = 1;
+    while (exp) // equivalent to: while (exp!=0)
+    {
+        if (exp & 1) //check if exp is odd; equivalent to: if((exp & 1)==1)
+            result *= base;
+        exp >>= 1;
+        base *= base;
+    }
+
+    return result;
+}
+
+//recursive version:
+      public static double getPower(double x, int n){
+	        if(x==0){
+	            if(n==0) return 1;
+	            else if(n>0) return 0;
+	            else return Double.MAX_VALUE;
+	        }
+	        
+	        if(n>=0) return getPowerHelper(x,n);
+	        else return 1.0/getPowerHelper(x,-n);
+	    }
+	    public static double getPowerHelper(double x, int n){
+	        if(n<0) {
+	            System.out.println("the input n should be positive");
+		    System.exit(-1);
+	        }
+	        if(n==0) return 1;
+	        else if(n==1) return x;
+	        else{
+	            int half=n/2;
+	            double tmp= getPowerHelper(x,half);
+	            if(n%2==0){
+			return tmp*tmp;
+	            }else{
+	                return tmp*tmp*x;
+	            }
+	        
+	        }
+	        
+	    }
