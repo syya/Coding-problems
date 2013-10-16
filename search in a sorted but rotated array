@@ -1,0 +1,73 @@
+/* Algorithm:
+base cases: 
+    1) if(begin>end) return -1;
+	2) int mid=(begin+end)/2;
+	   if(array[mid]==target) return mid;
+each time, compare array[mid] with array[end] in order to judge which half is normally sorted; then further decide 
+whether target falls in this half or the other half. Do this recursively.
+
+*/
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+public class Solution{
+
+	public static void main(String[] args) throws IOException{
+       int array []={1,2,2,2,3,4,1};
+       System.out.println(search(array,0,array.length-1,3));
+		
+		 /*BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		 System.out.println("haha1");   
+		 String line = br.readLine();
+		 System.out.println("haha2");
+	        int N = Integer.parseInt(line);
+	        for (int i = 0; i < N; i++) {
+	            System.out.println("hello world");
+	        }*/
+	}
+	
+	public static int search(int array [] , int begin, int end, int target) {
+
+		if(begin>end) return -1;
+		int mid=(begin+end)/2;
+		if(array[mid]==target) return mid;
+		if(array[mid]<array[end]){
+			if(target>=array[mid]&&target<=array[end]){
+				return search(array, mid, end, target);
+			}
+			else return search(array, begin, mid-1,target);
+		}else if(array[mid]>array[end]){
+			if(target>=array[begin]&&target<=array[mid]){
+				return search(array, begin, mid, target);
+			}
+			else return search(array, mid+1, end,target);
+		}else {
+			if(array[mid]!=array[begin]) return search(array,begin, mid-1, target);
+			else{
+				int res=search(array, begin, mid-1,target);
+				if(res!=-1) return res;
+				else return search(array, mid+1, end, target);
+			}
+		}
+			
+
+	}
+	
+	public static int binarySearch(int[] array, int begin, int end, int target){
+		if(array==null||array.length<1) return -1;
+		while(begin<=end){
+			int mid=(begin+end)/2;
+			if(array[mid]>target){
+				end=mid-1;
+			}else if(array[mid]<target){
+				begin=mid+1;
+			}else return mid;
+			
+		}
+		return -1;
+	}
+
+}
