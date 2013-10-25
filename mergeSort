@@ -1,0 +1,54 @@
+import java.util.Arrays;
+
+public class Solution {
+	public static void main(String[] args){
+		int[] num={8,7,3,5,6,1,1,2,3};
+		mergeSort(num,0,num.length-1);
+		System.out.println(Arrays.toString(num));
+	}
+	
+	public static void mergeSort(int[] num, int start, int end){
+		if(start<end){
+			int mid=(start+end)/2;
+			mergeSort(num, start, mid);
+			mergeSort(num, mid+1, end);
+			merge(num, start, mid, end);
+		}
+	}
+    
+	public static void merge(int[] num, int start, int mid, int end){
+		//merge start...mid and mid+1...end
+		int[] result=new int[end-start+1];
+		int index1=start;
+		int index2=mid+1;
+		int index3=0;
+		while(index1<=mid && index2<=end){
+			if(num[index1]<=num[index2]){
+				result[index3]=num[index1];
+				index3++;
+				index1++;
+			}else{
+				result[index3]=num[index2];
+				index3++;
+				index2++;
+			}
+		}
+		if(index1>mid){
+			while(index2<=end){
+				result[index3]=num[index2];
+				index3++;
+				index2++;
+			}
+		}else{
+			while(index1<=mid){
+				result[index3]=num[index1];
+				index3++;
+				index1++;
+			}
+		}
+		//After getting result, copy result back to num (Note: cannot redirect num to another address!)
+		for(int i=start;i<=end;i++){
+			num[i]=result[i-start];
+		}
+	}
+}
