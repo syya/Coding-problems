@@ -1,0 +1,66 @@
+/* Question description:
+Given a number of length n, remove k digits from them, but keep the remaining digits in the same order.
+Output the minimal possible result
+eg: 
+input: number: 2143214 (length: 7), k: 4
+output: 114
+*/
+
+/* Solution:
+Use a window of size length-k. First, fill the window with the first k digits. Then move the window along the number 
+digit by digit. Each time when encounter a new digit, consider whether to include this new digit at the end of the 
+window, and meantime delete one old digit in the window, in order to achieve a minimal possible result.
+When the window arrives at the end of the number, output the number represented by the window, which will be the final
+output.
+Proof: use Induction: 
+at the beginning, the number represented by the window is the optimal result for the currently covered length of 
+numbers.
+Assume when the window arrives at the location m, the number represented by the window is the currently optimal result.
+Then if we move the window one digit further, we can prove that the updated optimal result must be derived from the 
+previous contents in the window: because for the previous version of the window, all digits are already the smallest
+possible ones..
+*/
+
+//Code:
+import java.util.ArrayList;
+
+public class Solution {
+	public static void main(String[] arg){
+		System.out.println(getMin(2143214, 4));
+	}
+    public static int getMin(int number, int k) {
+        String s=String.valueOf(number);
+        int n=s.length();
+        if(n<=k) return -1;
+        if(k<0) return -1;
+        if(k==0) return number;
+        int size=n-k;
+        ArrayList<Character> window=new ArrayList<Character>();
+        for(int i=0;i<size;i++){
+            window.add(s.charAt(i));
+        }
+        for(int i=size;i<n;i++){
+            char newc=s.charAt(i);
+            //check within the window:
+            for(int j=0;j<size-1;j++){
+                if(window.get(j)>window.get(j+1)){
+                    window.remove(j);
+                    break;
+                }
+            }
+            if(window.size()!=size){
+                window.add(newc);
+            }else{
+                if(window.get(size-1)>newc){
+                    window.remove(size-1);
+                    window.add(newc);
+                }
+            }
+        }
+        int res=0;
+        for(char c: window){
+            res=res*10+(c-'0');
+        }
+        return res;
+    }
+}
