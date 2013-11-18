@@ -1,0 +1,101 @@
+/* Google phone interview question:
+trip
+a -> c -> b -> d -> e
+one-way trip
+a->c
+c->b
+b->d
+d->e
+
+a,b,c,d,e : cities
+
+input :
+shuffled order like
+c->b
+d->e
+b->d
+a->c
+
+output : correct order representing trip
+a->c
+c->b
+b->d
+d->e
+
+n : # of tickets
+
+Note: the solution is unique (one possible solution)
+
+Key ideas:
+starting point: the node whose in-degree is 0 (in this example: a );
+ending point: the node whose out-degree is 0 (in this example: e);
+Then search from starting point towards ending point: for each point cur, get its end; then starting from this point, 
+go to the next one.. util we reach the end point. 
+*/
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+class Segment{
+	char start;
+	char end;
+	public Segment(char a, char b){
+		start=a;
+		end=b;
+	}
+	public char getEnd(){
+		return end;
+	}
+}
+
+class Solution{
+	static char start;
+	static char end;
+	public static void main(String[] args){
+		ArrayList<Segment> input=new ArrayList<Segment>();
+		input.add(new Segment('c','b'));
+		input.add(new Segment('d','e'));
+		input.add(new Segment('b','d'));
+		input.add(new Segment('a','c'));
+		ArrayList<Segment> output=getOrder(input);
+		for(Segment s:output){
+			System.out.println(s.start+"->"+s.end);
+		}
+	}
+	public static ArrayList<Segment> getOrder(ArrayList<Segment> input){
+		ArrayList<Segment> res=new ArrayList<Segment>();
+		if(input==null||input.size()<1) return null;
+		//first, find the starting point:
+		HashSet<Character> hs_all=new HashSet<Character>();
+		HashSet<Character> hs_start=new HashSet<Character>();
+		HashSet<Character> hs_end=new HashSet<Character>();
+		HashMap<Character, Character> hm=new HashMap<Character, Character>();
+		//initialize the hs:
+		for(Segment s:input){
+			char start=s.start;
+			char end=s.end;
+			hs_start.add(start);
+			hs_end.add(end);
+			hs_all.add(start);
+			hs_all.add(end);
+			hm.put(start,end);
+		}
+		HashSet<Character> hs_all2=new HashSet<Character>(hs_all);
+		hs_all.removeAll(hs_end);
+		for(char s:hs_all){
+			start=s;
+		}
+		hs_all2.removeAll(hs_start);
+		for(char e:hs_all2){
+			end=e;
+		}
+		char cur=start;
+		while(cur!=end){
+			char end=hm.get(cur);
+			res.add(new Segment(cur, end));
+			cur=end;
+		}
+		return res;
+	}
+}
