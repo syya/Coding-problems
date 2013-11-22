@@ -1,0 +1,62 @@
+card library
+ - standard deck
+    - 52 cards, 4 suits (spades, clovers, etc)
+  - Draw
+    - give a card
+    - no duplicates
+    - draw 53rd time
+  - Shuffle
+     - rearrange cards
+     
+class Suit{
+    private int type; //0,..3
+    private int value; //1,.., 13
+    public int getValue(){ return value;}
+    public Suite(int type, int value){
+        this.type=type;
+        this.value=value;
+    }
+}
+
+class Card{
+    Suit suit;
+    boolean isDrawn=false;
+    public Card(Suit suit){
+        this.suit.type=suit.type;
+        this.suit.value=suit.value;
+    }
+}
+class Deck<Card>{
+    ArrayList<Card> cards;
+    int index=0;
+    public void shuffle(){
+        // random change the order of the cards..
+        // int cur_size=52-index;
+        int[] arrayIndices=new int[cur_size];
+        for(int i=0;i<cur_size;i++){
+            arrayIndices[i]=i;
+        }
+        XXX.random(arrayIndices);
+        //reconstruct the cards ;
+        Card[] shuffled_cards=new Card[52];
+        for(int i=0;i<52;i++){
+            shuffled_card[i]=cards.get(arrayIndices[i]);
+        }
+        //t
+    }
+    public Suite drawACard(){
+        Card cur=cards.get(index);
+        cur.isDrawn=ture;
+        index++;
+        return cur.suit;
+    }
+    public Deck<Card>(){
+        // add 52 cards into the ArrayList cards.
+    }
+    Deck<>(ArrayList<Card> cards){
+        // check 
+        
+        this.cards=cards; 
+    }
+    
+}
