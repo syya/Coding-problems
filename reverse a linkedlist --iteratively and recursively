@@ -38,7 +38,7 @@ public class Solution {
 	}
 }
 
-/* Solution 2: reverse a linkedlist recursively
+/* Solution 2: reverse the linkedlist recursively
 */
 class Node{
 	int data;
@@ -48,7 +48,6 @@ class Node{
 	}
 }
 public class Solution {
-	static Node HEAD=new Node(1);
 	public static void main(String[] args){
 		Node n1=new Node(1);
 		Node n2=new Node(2);
@@ -56,31 +55,26 @@ public class Solution {
 		Node n4=new Node(4);
 		n1.next=n2;
 		n2.next=n3;
-//		n3.next=n4;
-		reverse1(n1);
-		Node cur=HEAD;
+		n3.next=n4;
+		Node cur=reverse1(n1);
 		while(cur!=null){
 			System.out.println(cur.data);
 			cur=cur.next;
 		}
-
 	}
 	
-	public static void reverse1(Node head){
-		if(head==null || head.next==null) return;
-		
-		helper(head);
-//		System.out.println("HEAD: "+HEAD.data);
+	public static Node reverse1(Node head){
+		if(head==null || head.next==null) return head;
+		return helper(head); // the head of the reversed linkedlist will be returned
 	}
-	public static void helper(Node n){
+	public static Node helper(Node n){
 		if(n.next==null) {
-			HEAD=n;
-			return;
+			return n;
 		}
-		
-		helper(n.next);
-		n.next.next=n;
+		Node head=helper(n.next);
+		n.next.next=n; //the key operation
 		n.next=null;
+		return head; // return the head back to the upper levels
 	}
 	
 }
