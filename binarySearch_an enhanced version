@@ -32,3 +32,16 @@ public class Solution{
 /*Besides, the improved binarySearch can be put as a method which return an integer value:
 if the target is found, return the index of the target in the array;
 Or else, return the lower bound of the range that it falls at.*/
+
+int binarySearch(int[] array, int begin, int end, int target) throws Exception{
+	//check input:
+	if(array==null||array.length<1||array.length-1<Math.max(begin, end)) throw new Exception("invalid input");
+	while(begin<=end){
+		int mid=begin+(end-begin)/2;
+		if(array[mid]>target) end=mid-1;
+    	else if(array[mid]<target) begin=mid+1;
+    	else return mid;
+    }
+    //when finishing the while loop, the begin and end will be the bound of the range: (end, begin)
+    return end;
+}
