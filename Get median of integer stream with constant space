@@ -1,0 +1,77 @@
+/**
+ * 
+ */
+
+/**
+ * @author ldav
+ *
+ */
+public class Solution {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		MyClass myObject = new MyClass();
+		myObject.insert(5);
+		System.out.println(myObject.getMean());
+		System.out.println(myObject.getMedian());
+		myObject.insert(5);
+		System.out.println(myObject.getMean());
+		System.out.println(myObject.getMedian());
+		myObject.insert(5);
+		System.out.println(myObject.getMean());
+		System.out.println(myObject.getMedian());
+		
+
+	}
+
+}
+
+class MyClass {
+    int sum = 0;
+    int count = 0;
+    int[] counts = new int[1000];
+    public void insert (int value) {
+        sum += value;
+        count++;
+        counts[value]++;
+    }
+    public double getMean() {
+        if (count == 0) {
+            return 0;
+        }
+        return (sum * 1.0) / count;
+    }
+    public double getMedian(){
+        // approach 1: 
+        int i = 0, j = 999;
+        int loei = counts[0], goej = counts[999];
+        int leftLastNumber = -1;
+        int rightLastNumber = -1;
+        while (i + 1 < j) {
+            if (loei <= goej) {
+                i++;
+                if (counts[i]> 0) {
+                	leftLastNumber = i;
+                	loei += counts[i];
+                }
+                
+            } else {
+                j--;
+                if (counts[j] > 0){
+                	rightLastNumber = j;
+                	goej += counts[j];
+                }
+            }
+        }
+        if (loei > goej) {
+            return leftLastNumber;
+        } else if (loei < goej){
+            return rightLastNumber;
+        } else {
+        	return (leftLastNumber + rightLastNumber)/2.0;
+        }
+    }
+}
