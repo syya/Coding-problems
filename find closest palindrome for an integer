@@ -1,0 +1,58 @@
+/**
+ * 
+ */
+
+/**
+ * @author ldav
+ *
+ */
+public class Solution {
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		// case 1: (middle unchaged)
+		// 12334 -> 12321
+		// 1438 -> 1441
+		// case 2: (middle +1)
+		// 189 -> 191
+		// 1999 -> 2002
+		// case 3: (middle -1)
+		// 980 -> 979
+		// 91 -> 88
+		int[] testNum = { 12334, 1438, 189, 1999, 980, 91 };
+		for (int i : testNum) {
+			System.out.println(findClosestPalindrome(i));
+		}
+	}
+
+	public static int findClosestPalindrome(int num) {
+		if (num < 1)
+			return -1;
+		String s = String.valueOf(num);
+		int res = Integer.MIN_VALUE;
+		int[] options = { -1, 0, 1 };
+		if ((s.length() & 1) == 0) {// even: leftHalf: [0, s.length/2 - 1]
+			for (int op : options) {
+				String leftHalf = String.valueOf(Integer.valueOf(s.substring(0, s.length() / 2)) + op);
+				String mirror = new StringBuilder(leftHalf).reverse().toString();
+				int candidate = Integer.valueOf(new StringBuilder(leftHalf).append(mirror).toString());
+				if (Math.abs(candidate - num) < Math.abs(res - num)){
+					res = candidate;
+				}
+			}
+		} else { // odd: leftHalf including middle digit: [0,s.length()/2]
+			for (int op : options) {
+				String leftHalf = String.valueOf(Integer.valueOf(s.substring(0, s.length() / 2 + 1)) + op);
+				String mirror = new StringBuilder(leftHalf.substring(0, leftHalf.length() - 1)).reverse().toString();
+				int candidate = Integer.valueOf(new StringBuilder(leftHalf).append(mirror).toString());
+				if (Math.abs(candidate - num) < Math.abs(res - num)){
+					res = candidate;
+				}
+			}
+		}
+		return res;
+	}
+}
