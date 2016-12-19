@@ -1,0 +1,107 @@
+class BlockingQueue<T> {
+	int size;
+	LinkedList<T> q;
+	int count;
+	public BlockingQueue(int size){
+		this.size = size;
+		this.count = 0;
+		q = new LinkedList<T>();
+	}
+	synchronized void enqueue (T a){
+		while(count == size){
+			try {
+				System.out.println("Queue is full. Wait...");
+				wait(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		q.offer(a);
+		count++;
+		notifyAll();
+	}
+	
+	synchronized T dequeue(){
+		while(count == 0){
+			try {
+				System.out.println("Queue is empty. Wait...");
+				wait(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		T b = q.poll();
+		count--;
+		notifyAll();
+		return b;
+	}
+	
+}
+
+class Producer implements Runnable{
+	BlockingQueue<Integer> bq;
+	public Producer(BlockingQueue<Integer> bq){
+		this.bq = bq;
+	}
+	public void run(){
+		for (int i = 0; i < 10; i++){
+			
+			bq.enqueue(i);
+			System.out.println("enqueued " + i);
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+class Consumer implements Runnable{
+	BlockingQueue<Integer> bq;
+	public Consumer(BlockingQueue<Integer> bq){
+		this.bq = bq;
+	}
+	public void run(){
+		for (int i = 0; i < 10; i++){
+			bq.dequeue();
+			System.out.println("dequeued " + i);
+			
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class Solution {
+	public static void main(String[] args){
+		BlockingQueue<Integer> bq = new BlockingQueue<Integer>(5);
+		Producer p = new Producer(bq);
+		Consumer c = new Consumer(bq);
+		Thread t1 = new Thread(p);
+		t1.start();
+		Thread t2 = new Thread(c);
+		t2.start();
+		try {
+			t1.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			t2.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		System.out.println("Finished!");
+	}
+}
