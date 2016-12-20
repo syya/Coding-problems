@@ -1,0 +1,33 @@
+public class Solution {
+	
+    public List<List<Integer>> getFactors(int n) {
+    	List<List<Integer>> res = new ArrayList<List<Integer>>();
+    	List<Integer> factorCombination = new ArrayList<Integer>();
+    	getFactorsHelper(n, 2, factorCombination, res);
+    	return res;
+    }
+    
+    public void getFactorsHelper(int n,
+    		int start,
+    		List<Integer> factorCombination, 
+    		List<List<Integer>> res){
+    	if (n <= 1){
+    		if (factorCombination.size() > 1){
+    			res.add(new ArrayList<Integer>(factorCombination)); // avoid add [n] as a factor combination
+    		}
+    		return;
+    	}
+    	for (int i = start; i <= n; i++){
+    		if (n % i == 0){
+    			factorCombination.add(i);
+    			getFactorsHelper(n/i, i, factorCombination, res);
+    			factorCombination.remove(factorCombination.size() -1);
+    		}
+    	}
+    }
+    
+	public static void main(String[] args){
+		Solution s = new Solution();
+		System.out.println(s.getFactors(12));
+	}
+}
