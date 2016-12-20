@@ -1,0 +1,103 @@
+import java.util.*;
+
+// class NestedInteger definition:
+class NestedInteger {
+	int val;
+	List<NestedInteger> list;
+	public boolean isInteger(){
+		return list == null;
+	}
+	
+	public Integer getInteger(){
+		return val;
+	}
+ 
+	public List<NestedInteger> getList(){
+		return list;
+	}
+	
+	public NestedInteger(int val){
+		this.val = val;
+	}
+	
+	public NestedInteger(){
+		list = new ArrayList<NestedInteger>();
+	}
+	
+	public void addToList(NestedInteger ni){
+		list.add(ni);
+	}
+}
+
+// implement iterator of NestedInteger
+class NestedIterator implements Iterator<Integer> {
+    Stack<NestedInteger> st = new Stack<NestedInteger>();
+    public NestedIterator(NestedInteger ni) {
+        if (ni == null){
+            return;
+        }
+        st.push(ni);
+    }
+
+    public Integer next() {
+    	System.out.println("Fetch the next integer: " + st.peek().getInteger());
+        return st.pop().getInteger();
+    }
+
+    public boolean hasNext() {
+        // try to find the next integer:
+        while (st.size() != 0){
+            if (st.peek().isInteger()){
+                return true;
+            } else {
+                List<NestedInteger> list = st.pop().getList();
+                for (int i = list.size() - 1; i >= 0; i--){
+                    st.push(list.get(i));
+                }
+            }
+        }
+        return false;
+    }
+
+	@Override
+	public void remove() {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+// run some test cases:
+public class Solution {
+	public static void main(String[] args){
+		// construct ni:  [[1,1],2,[1,1]]
+		NestedInteger ni = new NestedInteger();
+		// ni consists of ni0, ni1, ni2:
+		// construct ni0:[1, 1]
+		NestedInteger ni0 = new NestedInteger();
+		NestedInteger ni01 = new NestedInteger(1);
+		NestedInteger ni02 = new NestedInteger(1);
+		ni0.addToList(ni01);
+		ni0.addToList(ni02);
+		// construct ni1: 2
+		NestedInteger ni1 = new NestedInteger(2);
+		// construct ni2:[1, 1]
+		NestedInteger ni2 = new NestedInteger();
+		NestedInteger ni21 = new NestedInteger(1);
+		NestedInteger ni22 = new NestedInteger(1);
+		ni2.addToList(ni21);
+		ni2.addToList(ni22);
+		// ensemble ni0, ni1, ni2 to construct ni:
+		ni.addToList(ni0);
+		ni.addToList(ni1);
+		ni.addToList(ni2);
+		
+		// test on the iterator:
+		NestedIterator niterator = new NestedIterator(ni);
+		ArrayList<Integer> res = new ArrayList<Integer>();
+		while(niterator.hasNext()){
+			res.add(niterator.next());
+		}
+		System.out.println(res);
+		System.out.println("Finished!");
+	}
+}
