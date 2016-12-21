@@ -54,8 +54,7 @@ class BST{
 		}
 	}
 	
-	// if the val can be found in the tree, return the corresponding removed node; 
-	// otherwise, return null.
+	// Return the deleted node if the val can be found in the tree; otherwise, return null
 	public TreeNode delete(int val){
 		// First, find the node to be removed, keeping track of its parent node
 		// and using variable isLeft to track whether it's a left child 
@@ -154,9 +153,9 @@ class BST{
 	}
 }
 
-public class Solution {
+public class BSTtester {
 	public static void main(String[] args){
-		// test BST class with multiple testing cases:
+		// The above BST class was tested with multiple testing cases. The following is one example:
 		BST bst = new BST();
 		bst.insert(4);
 		bst.insert(2);
