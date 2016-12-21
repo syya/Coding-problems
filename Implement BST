@@ -1,0 +1,176 @@
+class TreeNode{
+	int val;
+	TreeNode left;
+	TreeNode right;
+	
+	public TreeNode(int val){
+		this.val = val;
+		this.left = null;
+		this.right = null;
+	}
+	
+	public String toString(){
+		return String.valueOf(val);
+	}
+}
+
+class BST{
+	TreeNode root;
+	
+	public TreeNode find(int val){
+		TreeNode cur = root;
+		while (cur != null){
+			if (cur.val > val){
+				cur = cur.left;
+			} else if (cur.val < val) {
+				cur = cur.right;
+			} else {
+				return cur;
+			}
+		}
+		return null;
+	}
+	
+	public void insert(int val){
+		if (root == null){
+			root = new TreeNode(val);
+			return;
+		}
+		TreeNode cur = root;
+		while(true){
+			if (cur.val > val){
+				if (cur.left == null){
+					cur.left = new TreeNode(val);
+					return;
+				}
+				cur = cur.left;
+			} else {
+				if (cur.right == null){
+					cur.right = new TreeNode(val);
+					return;
+				}
+				cur = cur.right;
+			}
+		}
+	}
+	
+	// if the val can be found in the tree, return the corresponding removed node; 
+	// otherwise, return null.
+	public TreeNode delete(int val){
+		// First, find the node to be removed, keeping track of its parent node
+		// and using variable isLeft to track whether it's a left child 
+		// or right child of the parent node
+		TreeNode parent = null;
+		TreeNode cur = root;
+		boolean isLeft = false;
+		while (cur != null){
+			if (cur.val > val){
+				parent = cur;
+				isLeft = true;
+				cur = cur.left;
+			} else if (cur.val < val){
+				parent = cur;
+				isLeft = false;
+				cur = cur.right;
+			} else { // found the node
+				break;
+			}
+		}
+		if (cur == null){
+			return null; //the val couldn't be found in the BST.
+		}
+		// Now, delete the node:
+		// Three cases: 
+		// 1. It is a leaf node;
+		// 2. It has only one child;
+		// 3. It has two children;
+		// For each case, need to handle the special case that cur == root
+		if (cur.left == null && cur.right == null){
+			// Case 1: it is a leaf node
+			if (cur == root){
+				root = null; // after deleting this node, root will be null;
+			} else {
+				if (isLeft){
+					parent.left = null;
+				} else {
+					parent.right = null;
+				}
+			}
+		} else if (cur.left == null || cur.right == null){
+			// Case 2: it has only one child
+			// In this case, we directly use its only child to replace it
+			TreeNode child = null;
+			if (cur.left != null){
+				child = cur.left;
+			} else {
+				child = cur.right;
+			}
+			if (cur == root){
+				root = child;
+			} else {
+				if(isLeft){
+					parent.left = child;
+				} else {
+					parent.right = child;
+				}
+			}
+		} else {
+			// Case 3: it has two children
+			// In this case, we can use the max node in the left subtree to replace it
+			// To replace the current node with a new node later, we need to remember the
+			// current node's left child and right child:
+			TreeNode left = cur.left;
+			TreeNode right = cur.right;
+			// Next, use two variables to keep track of the replacement node and its parent: 
+			TreeNode parent_replacementNode = cur; 
+			TreeNode replacementNode = cur.left;
+			boolean isLeft_replacementNode = true;
+			while (replacementNode.right != null){
+				parent_replacementNode = replacementNode;
+				replacementNode = replacementNode.right;
+				isLeft_replacementNode = false;
+			}
+			// After finding the replacement node, we detach it from its parent, 
+			// using its left child to replace it, and then use 
+			// it to replace the node we were going to delete at the begining:
+			if (isLeft_replacementNode) {
+				parent_replacementNode.left = replacementNode.left;
+			} else {
+				parent_replacementNode.left = replacementNode.right;
+			}
+			if (cur == root) { // the deleted node is root
+				root = replacementNode;
+			} else {
+				if (isLeft) {
+					parent.left = replacementNode;
+				} else {
+					parent.right = replacementNode;
+				}
+			}
+			replacementNode.left = left;
+			replacementNode.right = right;
+		}
+		return cur; // return the deleted node at the end
+	}
+}
+
+public class Solution {
+	public static void main(String[] args){
+		// test BST class with multiple testing cases:
+		BST bst = new BST();
+		bst.insert(4);
+		bst.insert(2);
+		System.out.println(bst.find(6)); // expect: null
+		bst.insert(6);
+		System.out.println(bst.find(6)); // expect: 6
+		bst.insert(5);
+		bst.delete(6);
+		System.out.println(bst.find(6)); // expect: null
+		TreeNode t = bst.find(4);
+		System.out.println(t.right); // expect: 5
+		bst.insert(1);
+		bst.insert(3);
+		bst.delete(4);
+		System.out.println(bst.root); // expect: 3
+	}
+}
