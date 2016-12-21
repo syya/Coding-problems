@@ -37,20 +37,23 @@ class BST{
 			return;
 		}
 		TreeNode cur = root;
-		while(true){
+		TreeNode parent = null;
+		boolean isLeft = false;
+		while(cur != null){
 			if (cur.val > val){
-				if (cur.left == null){
-					cur.left = new TreeNode(val);
-					return;
-				}
+				parent = cur;
+				isLeft = true;
 				cur = cur.left;
 			} else {
-				if (cur.right == null){
-					cur.right = new TreeNode(val);
-					return;
-				}
+				parent = cur;
+				isLeft = false;
 				cur = cur.right;
 			}
+		}
+		if (isLeft){
+			parent.left = new TreeNode(val);
+		} else {
+			parent.right = new TreeNode(val);
 		}
 	}
 	
